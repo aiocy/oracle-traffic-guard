@@ -74,8 +74,15 @@ echo "总闸规则优先级：nft inet hook priority -500，优先于 Podman/rfw
 echo
 
 if ! command -v python3 >/dev/null 2>&1; then
-  echo "需要 python3 用于配置计算和解析 vnStat JSON。" >&2
-  exit 1
+  echo "未检测到 python3，先自动安装 python3 用于配置计算和解析 vnStat JSON。" >&2
+  if command -v apt-get >/dev/null 2>&1; then
+    export DEBIAN_FRONTEND=noninteractive
+    apt-get update -qq
+    apt-get install -y python3 ca-certificates
+  else
+    echo "需要 python3，但找不到 apt-get；请先手动安装 python3。" >&2
+    exit 1
+  fi
 fi
 
 DEFAULT_IFACE=$(auto_iface || true)

@@ -74,8 +74,15 @@ echo "Fuse rule priority: nft inet hook priority -500, intended to run above Pod
 echo
 
 if ! command -v python3 >/dev/null 2>&1; then
-  echo "python3 is required for config calculation and vnStat JSON parsing." >&2
-  exit 1
+  echo "python3 not found; installing python3 first for config calculation and vnStat JSON parsing." >&2
+  if command -v apt-get >/dev/null 2>&1; then
+    export DEBIAN_FRONTEND=noninteractive
+    apt-get update -qq
+    apt-get install -y python3 ca-certificates
+  else
+    echo "python3 is required, but apt-get was not found. Please install python3 manually first." >&2
+    exit 1
+  fi
 fi
 
 DEFAULT_IFACE=$(auto_iface || true)
