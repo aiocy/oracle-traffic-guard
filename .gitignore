@@ -1,0 +1,8 @@
+*.env
+.env
+*.key
+*.pem
+*.crt
+*.token
+*_token.txt
+.DS_Store
